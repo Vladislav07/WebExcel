@@ -33,8 +33,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="eDrawings.Interop.EModelViewControl, Version=27.2.0.66, Culture=neutral, PublicKeyToken=4ef2927eea4906f6, processorArchitecture=MSIL">
+    <Reference Include="eDrawings.Interop.EModelViewControl">
       <HintPath>..\..\..\..\..\..\Program Files\SOLIDWORKS Corp\eDrawings\eDrawings.Interop.EModelViewControl.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="SpreadsheetGear, Version=5.0.3.106, Culture=neutral, PublicKeyToken=39c186f5904944ec, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SpreadsheetGear\SpreadsheetGear.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -49,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BooksRepo.cs" />
     <Compile Include="eDrawingHost.cs">
       <SubType>Component</SubType>
     </Compile>

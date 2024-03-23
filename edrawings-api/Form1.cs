@@ -9,11 +9,19 @@ namespace edrawings_api
 {
     public partial class Form1 : Form
     {
-        private const string FILE_PATH = @"C:\CUBY_PDM\Work\Other\Без проекта\CUBY-V1.1\CAD\Завод контейнер\Участок сварочный\Кран балка\CUBY-00170130.sldasm";
+        private string FILE_PATH = ""; // @"C:\CUBY_PDM\Work\Other\Без проекта\CUBY-V1.1\CAD\Завод контейнер\Участок сварочный\Кран балка\CUBY-00170130.sldasm";
         EModelViewControl m_Ctrl;
         public Form1()
         {
             InitializeComponent();
+
+            if (openFileDialog1.ShowDialog() == DialogResult.Cancel)
+                return;
+            FILE_PATH = openFileDialog1.FileName;
+
+            System.Data.DataTable dt = new System.Data.DataTable();
+            BooksRepo repo = new BooksRepo();
+            repo.GetTableDt(FILE_PATH, ref dt);
 
             var host = new eDrawingHost();
             host.ControlLoaded += OnControlLoaded;
