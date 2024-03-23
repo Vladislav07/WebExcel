@@ -46,7 +46,7 @@ namespace edrawings_api
                     DataRow workRow = dt.NewRow();
                     for (int i = 0; i < count; i++)
                     {
-                        workRow[i] = currentRow.Cells[0, i];
+                        workRow[i] = currentRow.Cells[0, i].Formula.ToString();
                        
                     }
                 dt.Rows.Add(workRow);

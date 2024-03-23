@@ -1,59 +1,88 @@
-﻿
-using eDrawings.Interop.EModelViewControl;
-using System;
-using System.Diagnostics;
+﻿using System;
+using System.Data;
+//using Microsoft.Office.Interop.Excel;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.IO;
+using System.Collections.Generic;
+//using Excel = Microsoft.Office.Interop.Excel;
 
 namespace edrawings_api
 {
     public partial class Form1 : Form
     {
-        private string FILE_PATH = ""; // @"C:\CUBY_PDM\Work\Other\Без проекта\CUBY-V1.1\CAD\Завод контейнер\Участок сварочный\Кран балка\CUBY-00170130.sldasm";
-        EModelViewControl m_Ctrl;
-        public Form1()
+
+        System.Data.DataTable dt2;
+
+
+        public Form1(System.Data.DataTable dt)
         {
             InitializeComponent();
-
-            if (openFileDialog1.ShowDialog() == DialogResult.Cancel)
-                return;
-            FILE_PATH = openFileDialog1.FileName;
-
-            System.Data.DataTable dt = new System.Data.DataTable();
-            BooksRepo repo = new BooksRepo();
-            repo.GetTableDt(FILE_PATH, ref dt);
-
-            var host = new eDrawingHost();
-            host.ControlLoaded += OnControlLoaded;
-            this.Controls.Add(host);
-            host.Dock = DockStyle.Fill;
+            dt2 = dt;
+            
+            this.advancedDataGridView1.AutoGenerateColumns = true;
+    
         }
-
-        private void OnControlLoaded(EModelViewControl ctrl)
+          
+        void Data_output(System.Data.DataTable dt)
         {
-            m_Ctrl = ctrl;
-            ctrl.OnFinishedLoadingDocument += OnFinishedLoadingDocument;
-            ctrl.OnFailedLoadingDocument += OnFailedLoadingDocument;
-            ctrl.OpenDoc(FILE_PATH, false, false, false, "");
+            this.Cursor = Cursors.WaitCursor;
+            this.bindingSource1.DataSource = dt;
+            this.Cursor = Cursors.Arrow;
         }
+  
 
-        private void OnFailedLoadingDocument(string fileName, int errorCode, string errorString)
+
+        public void Form1_Load(object sender, EventArgs e)
         {
-            Trace.WriteLine($"{fileName} failed to loaded: {errorString}");
+
+            try
+            {
+                Data_output(dt2);
+            }
+
+            catch (System.Runtime.InteropServices.COMException ex)
+            { MessageBox.Show("HRESULT = 0x" + ex.ErrorCode.ToString("X") + " " + ex.Message); }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+
         }
 
-        private void OnFinishedLoadingDocument(string fileName)
+        private void btnToPDF_Click(object sender, EventArgs e)
         {
-            Trace.WriteLine($"{fileName} loaded");
-             string PRINTER_NAME = "Microsoft Print to PDF";
-             int AUTO_SOURCE = 7;
-             m_Ctrl.SetPageSetupOptions(EMVPrintOrientation.eLandscape, 7, 100, 100, 1, AUTO_SOURCE, PRINTER_NAME, 0, 0, 0, 0);
-            string pdfFileName = Path.GetFileNameWithoutExtension(fileName) + ".pdf";
-            string outDir = @"D:\macros";
-            string pdfFilePath;
-            pdfFilePath = Path.Combine(outDir, pdfFileName);
-
-            m_Ctrl.Print5(false, fileName, false, false, true, EMVPrintType.eWYSIWYG, 1, 0, 0, true, 1, 1, pdfFilePath);
+            Convert_to_PDF(advancedDataGridView1);
         }
+
+
+
+   
+        private void Convert_to_PDF(ADGV.AdvancedDataGridView DG)
+        {
+            List<string> listDrawingPath = new List<string>();
+            try
+            {
+                foreach (DataGridViewRow i in DG.Rows)
+                {
+                    if (i.IsNewRow) continue;
+                    DataGridViewCellCollection j = i.Cells;
+                    if (j["Drawing"].Value.ToString() == "1")
+                    {
+                        listDrawingPath.Add(j["File_Name"].Value.ToString());
+                    }
+
+                }
+
+            }
+
+            catch
+            {
+
+                this.Cursor = Cursors.Arrow;
+                MessageBox.Show(" No access to file " + "\n" + saveFileDialog1.FileName.ToString());
+
+            }
+
+
+        }
+        
+
     }
 }
