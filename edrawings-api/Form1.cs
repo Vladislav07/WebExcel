@@ -1,29 +1,34 @@
 ﻿using System;
 using System.Data;
-//using Microsoft.Office.Interop.Excel;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Collections.Generic;
-//using Excel = Microsoft.Office.Interop.Excel;
+
 
 namespace edrawings_api
 {
+   
     public partial class Form1 : Form
     {
-
-        System.Data.DataTable dt2;
-        public event Action<List<string>> proccesedBom;
-
-        public Form1(System.Data.DataTable dt)
+        private string FILE_PATH = "";
+        DataTable dt;
+     
+   
+        public Form1()
         {
             InitializeComponent();
-            dt2 = dt;
-            
+            if (openFileDialog1.ShowDialog() == DialogResult.Cancel)
+                return;
+            FILE_PATH = openFileDialog1.FileName;
+            BooksRepo repo = new BooksRepo();
+            dt = new DataTable();
+            repo.GetTableDt(FILE_PATH, ref dt);       
             this.advancedDataGridView1.AutoGenerateColumns = true;
     
         }
           
-        void Data_output(System.Data.DataTable dt)
+        void Data_output(DataTable dt)
         {
             this.Cursor = Cursors.WaitCursor;
             this.bindingSource1.DataSource = dt;
@@ -37,12 +42,13 @@ namespace edrawings_api
 
             try
             {
-                Data_output(dt2);
+                Data_output(dt);
             }
 
             catch (System.Runtime.InteropServices.COMException ex)
             { MessageBox.Show("HRESULT = 0x" + ex.ErrorCode.ToString("X") + " " + ex.Message); }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
+            this.Show();
 
         }
 
@@ -72,7 +78,8 @@ namespace edrawings_api
 
                 if (listDrawingPath.Count > 0)
                 {
-                    proccesedBom?.Invoke(listDrawingPath);
+                    FormBom fb = new FormBom(listDrawingPath);
+
                 }
 
             }

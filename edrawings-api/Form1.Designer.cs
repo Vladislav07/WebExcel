@@ -37,6 +37,7 @@ namespace edrawings_api
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.btnToPDF = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.advancedDataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.SuspendLayout();
@@ -75,6 +76,10 @@ namespace edrawings_api
             this.btnToPDF.UseVisualStyleBackColor = true;
             this.btnToPDF.Click += new System.EventHandler(this.btnToPDF_Click);
             // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(1456, 657);
@@ -111,5 +116,6 @@ namespace edrawings_api
         private System.Windows.Forms.BindingSource bindingSource1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private Button btnToPDF;
+        private OpenFileDialog openFileDialog1;
     }
 }

@@ -15,7 +15,7 @@ namespace edrawings_api
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormBom());
+            Application.Run(new Form1());
         }
     }
 }

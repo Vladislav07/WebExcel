@@ -11,40 +11,27 @@ namespace edrawings_api
 {
     public partial class FormBom : Form
     {
-        private string FILE_PATH = ""; // @"C:\CUBY_PDM\Work\Other\Без проекта\CUBY-V1.1\CAD\Завод контейнер\Участок сварочный\Кран балка\CUBY-00170130.sldasm";
+      
         EModelViewControl m_Ctrl;
         List<string> listDrawing;
-        public FormBom()
+    
+        public FormBom(List<string> list)
         {
-            InitializeComponent();
-
-            if (openFileDialog1.ShowDialog() == DialogResult.Cancel)
-                return;
-            FILE_PATH = openFileDialog1.FileName;
-
-            System.Data.DataTable dt = new System.Data.DataTable();
-            BooksRepo repo = new BooksRepo();
-            repo.GetTableDt(FILE_PATH, ref dt);
-            Form1 fb = new Form1(dt);
-            fb.proccesedBom += Fb_proccesedBom;
-            
-            fb.Show();
-            this.Hide();
-        }
-
-       
-
-        private void Fb_proccesedBom(List<string> list)
-        {
+            listDrawing = list;
+            InitializeComponent(); 
             var host = new eDrawingHost();
             host.ControlLoaded += OnControlLoaded;
             this.Controls.Add(host);
             host.Dock = DockStyle.Fill;
-            listDrawing = list;
-            
-
-
         }
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+
+            ctrlEDrw.LoadEDrawings();
+        }
+
+
 
         private void OnControlLoaded(EModelViewControl ctrl)
         {
@@ -105,6 +92,7 @@ namespace edrawings_api
                // Application.Exit();
             }
         }
-     
+
+        
     }
 }
