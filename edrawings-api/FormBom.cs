@@ -27,18 +27,21 @@ namespace edrawings_api
             repo.GetTableDt(FILE_PATH, ref dt);
             Form1 fb = new Form1(dt);
             fb.proccesedBom += Fb_proccesedBom;
-            var host = new eDrawingHost();
-            host.ControlLoaded += OnControlLoaded;
-            this.Controls.Add(host);
-            host.Dock = DockStyle.Fill;
+            
+            fb.Show();
+            this.Hide();
         }
 
        
 
         private void Fb_proccesedBom(List<string> list)
         {
+            var host = new eDrawingHost();
+            host.ControlLoaded += OnControlLoaded;
+            this.Controls.Add(host);
+            host.Dock = DockStyle.Fill;
             listDrawing = list;
-            PrintNext(list);
+            
 
 
         }
@@ -46,18 +49,32 @@ namespace edrawings_api
         private void OnControlLoaded(EModelViewControl ctrl)
         {
             m_Ctrl = ctrl;
-            ctrl.OnFinishedLoadingDocument += OnFinishedLoadingDocument;
-            ctrl.OnFailedLoadingDocument += OnFailedLoadingDocument;
-            
+            ctrl.OnFinishedLoadingDocument += OnDocumentLoaded;
+            ctrl.OnFailedLoadingDocument += OnDocumentLoadFailed;
+            ctrl.OnFinishedPrintingDocument += OnDocumentPrinted;
+            ctrl.OnFailedPrintingDocument += OnPrintFailed;
+            PrintNext();
         }
 
-        private void OnFailedLoadingDocument(string fileName, int errorCode, string errorString)
+        private void OnPrintFailed(string PrintJobName)
+        {
+            Trace.WriteLine($"Failed to export - {PrintJobName}");
+            PrintNext();
+        }
+
+        private void OnDocumentPrinted(string PrintJobName)
+        {
+            Console.WriteLine($"export completed {PrintJobName}");
+            PrintNext();
+        }
+
+        private void OnDocumentLoadFailed(string fileName, int errorCode, string errorString)
         {
             Trace.WriteLine($"{fileName} failed to loaded: {errorString}");
-           // PrintNext(list);
+            PrintNext();
         }
 
-        private void OnFinishedLoadingDocument(string fileName)
+        private void OnDocumentLoaded(string fileName)
         {
             Trace.WriteLine($"{fileName} loaded");
              string PRINTER_NAME = "Microsoft Print to PDF";
@@ -71,20 +88,21 @@ namespace edrawings_api
             m_Ctrl.Print5(false, fileName, false, false, true, EMVPrintType.eWYSIWYG, 1, 0, 0, true, 1, 1, pdfFilePath);
         }
 
-        private void PrintNext(List<string> list)
+        private void PrintNext()
         {
             
-            if (list.Count > 0)
+            if (listDrawing.Count > 0)
             {
-              string filePath = list[0];
-              list.RemoveAt(0);
+              string filePath = listDrawing[0];
+              listDrawing.RemoveAt(0);
               m_Ctrl.CloseActiveDoc("");
               m_Ctrl.OpenDoc(filePath, false, false, false, "");
 
             }
             else
             {
-
+                this.Close();
+               // Application.Exit();
             }
         }
      
