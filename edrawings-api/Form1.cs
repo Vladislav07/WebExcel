@@ -12,7 +12,7 @@ namespace edrawings_api
     {
 
         System.Data.DataTable dt2;
-
+        public event Action<List<string>> proccesedBom;
 
         public Form1(System.Data.DataTable dt)
         {
@@ -68,6 +68,11 @@ namespace edrawings_api
                         listDrawingPath.Add(j["File_Name"].Value.ToString());
                     }
 
+                }
+
+                if (listDrawingPath.Count > 0)
+                {
+                    proccesedBom?.Invoke(listDrawingPath);
                 }
 
             }

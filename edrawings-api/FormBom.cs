@@ -4,6 +4,8 @@ using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.IO;
+using System.Collections.Generic;
+using System.Collections;
 
 namespace edrawings_api
 {
@@ -11,6 +13,7 @@ namespace edrawings_api
     {
         private string FILE_PATH = ""; // @"C:\CUBY_PDM\Work\Other\Без проекта\CUBY-V1.1\CAD\Завод контейнер\Участок сварочный\Кран балка\CUBY-00170130.sldasm";
         EModelViewControl m_Ctrl;
+        List<string> listDrawing;
         public FormBom()
         {
             InitializeComponent();
@@ -23,11 +26,21 @@ namespace edrawings_api
             BooksRepo repo = new BooksRepo();
             repo.GetTableDt(FILE_PATH, ref dt);
             Form1 fb = new Form1(dt);
-            fb.Show();
-           // var host = new eDrawingHost();
-           // host.ControlLoaded += OnControlLoaded;
-          //  this.Controls.Add(host);
-          //  host.Dock = DockStyle.Fill;
+            fb.proccesedBom += Fb_proccesedBom;
+            var host = new eDrawingHost();
+            host.ControlLoaded += OnControlLoaded;
+            this.Controls.Add(host);
+            host.Dock = DockStyle.Fill;
+        }
+
+       
+
+        private void Fb_proccesedBom(List<string> list)
+        {
+            listDrawing = list;
+            PrintNext(list);
+
+
         }
 
         private void OnControlLoaded(EModelViewControl ctrl)
@@ -35,12 +48,13 @@ namespace edrawings_api
             m_Ctrl = ctrl;
             ctrl.OnFinishedLoadingDocument += OnFinishedLoadingDocument;
             ctrl.OnFailedLoadingDocument += OnFailedLoadingDocument;
-            ctrl.OpenDoc(FILE_PATH, false, false, false, "");
+            
         }
 
         private void OnFailedLoadingDocument(string fileName, int errorCode, string errorString)
         {
             Trace.WriteLine($"{fileName} failed to loaded: {errorString}");
+           // PrintNext(list);
         }
 
         private void OnFinishedLoadingDocument(string fileName)
@@ -56,5 +70,23 @@ namespace edrawings_api
 
             m_Ctrl.Print5(false, fileName, false, false, true, EMVPrintType.eWYSIWYG, 1, 0, 0, true, 1, 1, pdfFilePath);
         }
+
+        private void PrintNext(List<string> list)
+        {
+            
+            if (list.Count > 0)
+            {
+              string filePath = list[0];
+              list.RemoveAt(0);
+              m_Ctrl.CloseActiveDoc("");
+              m_Ctrl.OpenDoc(filePath, false, false, false, "");
+
+            }
+            else
+            {
+
+            }
+        }
+     
     }
 }
