@@ -19,39 +19,39 @@ namespace edrawings_api
         {
             listDrawing = list;
             InitializeComponent(); 
-           // var host = new eDrawingHost();
-           // host.ControlLoaded += OnControlLoaded;
-          //  this.Controls.Add(host);
-          //  host.Dock = DockStyle.Fill;
+            var host = new eDrawingHost();
+            host.ControlLoaded += OnControlLoaded;
+            this.Controls.Add(host);
+            host.Dock = DockStyle.Fill;
         }
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
-            ctrlEDrw.EDrawingsControlLoaded += CtrlEDrw_EDrawingsControlLoaded;
-            ctrlEDrw.LoadEDrawings();
+           // ctrlEDrw.EDrawingsControlLoaded += CtrlEDrw_EDrawingsControlLoaded;
+           // ctrlEDrw.LoadEDrawings();
         }
-
+ /*
         private void CtrlEDrw_EDrawingsControlLoaded(EModelViewControl ctrl)
         {
             m_Ctrl = ctrl;
-            ctrl.OnFinishedLoadingDocument += OnDocumentLoaded;
-            ctrl.OnFailedLoadingDocument += OnDocumentLoadFailed;
-            ctrl.OnFinishedPrintingDocument += OnDocumentPrinted;
-            ctrl.OnFailedPrintingDocument += OnPrintFailed;
+            m_Ctrl.OnFinishedLoadingDocument += OnDocumentLoaded;
+            m_Ctrl.OnFailedLoadingDocument += OnDocumentLoadFailed;
+            m_Ctrl.OnFinishedPrintingDocument += OnDocumentPrinted;
+            m_Ctrl.OnFailedPrintingDocument += OnPrintFailed;
             PrintNext();
         }
 
-        /*
+      */ 
         private void OnControlLoaded(EModelViewControl ctrl)
         {
             m_Ctrl = ctrl;
-            ctrl.OnFinishedLoadingDocument += OnDocumentLoaded;
-            ctrl.OnFailedLoadingDocument += OnDocumentLoadFailed;
-            ctrl.OnFinishedPrintingDocument += OnDocumentPrinted;
-            ctrl.OnFailedPrintingDocument += OnPrintFailed;
+            m_Ctrl.OnFinishedLoadingDocument += OnDocumentLoaded;
+            m_Ctrl.OnFailedLoadingDocument += OnDocumentLoadFailed;
+            m_Ctrl.OnFinishedPrintingDocument += OnDocumentPrinted;
+            m_Ctrl.OnFailedPrintingDocument += OnPrintFailed;
             PrintNext();
         }
-        */
+        
         private void OnPrintFailed(string PrintJobName)
         {
             Trace.WriteLine($"Failed to export - {PrintJobName}");
@@ -66,13 +66,13 @@ namespace edrawings_api
 
         private void OnDocumentLoadFailed(string fileName, int errorCode, string errorString)
         {
-            Trace.WriteLine($"{fileName} failed to loaded: {errorString}");
+            Console.WriteLine($"{fileName} failed to loaded: {errorString}");
             PrintNext();
         }
 
         private void OnDocumentLoaded(string fileName)
         {
-            Trace.WriteLine($"{fileName} loaded");
+            Console.WriteLine($"{fileName} loaded");
              string PRINTER_NAME = "Microsoft Print to PDF";
              int AUTO_SOURCE = 7;
              m_Ctrl.SetPageSetupOptions(EMVPrintOrientation.eLandscape, 7, 100, 100, 1, AUTO_SOURCE, PRINTER_NAME, 0, 0, 0, 0);
@@ -97,7 +97,7 @@ namespace edrawings_api
             }
             else
             {
-                this.Close();
+               // this.Close();
                // Application.Exit();
             }
         }
