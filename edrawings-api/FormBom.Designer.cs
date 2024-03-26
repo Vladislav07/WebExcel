@@ -1,4 +1,4 @@
-﻿
+﻿using eDrawings.Interop.EModelViewControl;
 namespace edrawings_api
 {
     partial class FormBom
@@ -34,12 +34,15 @@ namespace edrawings_api
             // FormBom
             // 
             this.ctrlEDrw = new EDrawingsUserControl();
+            this.ctrlEDrw.Dock = System.Windows.Forms.DockStyle.Fill;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Name = "FormBom";
             this.Text = "FormBom";
             this.ResumeLayout(false);
+            this.ctrlEDrw.Name = "ctrlEDrw";
+            this.ctrlEDrw.EDrawingsControlLoaded += new System.Action<EModelViewControl>(this.OnControlLoaded);
 
         }
 

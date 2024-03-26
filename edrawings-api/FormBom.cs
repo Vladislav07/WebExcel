@@ -19,29 +19,17 @@ namespace edrawings_api
         {
             listDrawing = list;
             InitializeComponent(); 
-            var host = new eDrawingHost();
-            host.ControlLoaded += OnControlLoaded;
-            this.Controls.Add(host);
-            host.Dock = DockStyle.Fill;
+           // var host = new eDrawingHost();
+           // host.ControlLoaded += OnControlLoaded;
+           // this.Controls.Add(host);
+           // host.Dock = DockStyle.Fill;
         }
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
-           // ctrlEDrw.EDrawingsControlLoaded += CtrlEDrw_EDrawingsControlLoaded;
-           // ctrlEDrw.LoadEDrawings();
-        }
- /*
-        private void CtrlEDrw_EDrawingsControlLoaded(EModelViewControl ctrl)
-        {
-            m_Ctrl = ctrl;
-            m_Ctrl.OnFinishedLoadingDocument += OnDocumentLoaded;
-            m_Ctrl.OnFailedLoadingDocument += OnDocumentLoadFailed;
-            m_Ctrl.OnFinishedPrintingDocument += OnDocumentPrinted;
-            m_Ctrl.OnFailedPrintingDocument += OnPrintFailed;
-            PrintNext();
+            ctrlEDrw.LoadEDrawings();
         }
 
-      */ 
         private void OnControlLoaded(EModelViewControl ctrl)
         {
             m_Ctrl = ctrl;
