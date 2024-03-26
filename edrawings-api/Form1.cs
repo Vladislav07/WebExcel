@@ -71,7 +71,12 @@ namespace edrawings_api
                     DataGridViewCellCollection j = i.Cells;
                     if (j["Drawing"].Value.ToString() == "1")
                     {
-                        listDrawingPath.Add(j["File_Name"].Value.ToString());
+                        string Found_In = j["Found_In"].Value.ToString();
+                        string File_Name = Path.GetFileNameWithoutExtension(j["File_Name"].Value.ToString()) + ".pdf"; 
+                       
+                        string fileDRW = Path.Combine(Found_In, File_Name);
+
+                        listDrawingPath.Add(fileDRW);
                     }
 
                 }
@@ -79,7 +84,7 @@ namespace edrawings_api
                 if (listDrawingPath.Count > 0)
                 {
                     FormBom fb = new FormBom(listDrawingPath);
-
+                    fb.Show();
                 }
 
             }

@@ -19,21 +19,19 @@ namespace edrawings_api
         {
             listDrawing = list;
             InitializeComponent(); 
-            var host = new eDrawingHost();
-            host.ControlLoaded += OnControlLoaded;
-            this.Controls.Add(host);
-            host.Dock = DockStyle.Fill;
+           // var host = new eDrawingHost();
+           // host.ControlLoaded += OnControlLoaded;
+          //  this.Controls.Add(host);
+          //  host.Dock = DockStyle.Fill;
         }
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
-
+            ctrlEDrw.EDrawingsControlLoaded += CtrlEDrw_EDrawingsControlLoaded;
             ctrlEDrw.LoadEDrawings();
         }
 
-
-
-        private void OnControlLoaded(EModelViewControl ctrl)
+        private void CtrlEDrw_EDrawingsControlLoaded(EModelViewControl ctrl)
         {
             m_Ctrl = ctrl;
             ctrl.OnFinishedLoadingDocument += OnDocumentLoaded;
@@ -43,6 +41,17 @@ namespace edrawings_api
             PrintNext();
         }
 
+        /*
+        private void OnControlLoaded(EModelViewControl ctrl)
+        {
+            m_Ctrl = ctrl;
+            ctrl.OnFinishedLoadingDocument += OnDocumentLoaded;
+            ctrl.OnFailedLoadingDocument += OnDocumentLoadFailed;
+            ctrl.OnFinishedPrintingDocument += OnDocumentPrinted;
+            ctrl.OnFailedPrintingDocument += OnPrintFailed;
+            PrintNext();
+        }
+        */
         private void OnPrintFailed(string PrintJobName)
         {
             Trace.WriteLine($"Failed to export - {PrintJobName}");
