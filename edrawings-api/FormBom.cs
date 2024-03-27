@@ -13,12 +13,13 @@ namespace edrawings_api
     {
       
         EModelViewControl m_Ctrl;
-        public event Action EndProcessing;
+        string outDir = null;
         List<string> listDrawing;
     
-        public FormBom(List<string> list)
+        public FormBom(List<string> list, string pathFolderSave)
         {
             listDrawing = list;
+            outDir = pathFolderSave;
             InitializeComponent(); 
         }
         protected override void OnShown(EventArgs e)
@@ -62,7 +63,6 @@ namespace edrawings_api
              int AUTO_SOURCE = 7;
              m_Ctrl.SetPageSetupOptions(EMVPrintOrientation.eLandscape, 7, 100, 100, 1, AUTO_SOURCE, PRINTER_NAME, 0, 0, 0, 0);
             string pdfFileName = Path.GetFileNameWithoutExtension(fileName) + ".pdf";
-            string outDir = @"D:\macros\TEMP";
             string pdfFilePath;
             pdfFilePath = Path.Combine(outDir, pdfFileName);
             int sheetHeigth = (int)m_Ctrl.SheetHeight;
@@ -86,7 +86,7 @@ namespace edrawings_api
         private void PrintNext()
         {
             
-            if (listDrawing.Count > 0)
+            if (listDrawing.Count > 1000)
             {
               string filePath = listDrawing[0];
               listDrawing.RemoveAt(0);
@@ -100,13 +100,8 @@ namespace edrawings_api
                 if (rs == DialogResult.OK)
                 {
                     this.Dispose();
-                }
-                 EndProcessing?.Invoke();
-              
-
+                }                
             }
-        }
-
-        
+        }       
     }
 }

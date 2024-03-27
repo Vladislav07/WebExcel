@@ -34,6 +34,7 @@ namespace edrawings_api
             this.Cursor = Cursors.WaitCursor;
             this.bindingSource1.DataSource = dt;
             this.Cursor = Cursors.Arrow;
+            this.Activate();
         }
   
 
@@ -59,8 +60,6 @@ namespace edrawings_api
         }
 
 
-
-   
         private void Convert_to_PDF(ADGV.AdvancedDataGridView DG)
         {
             List<string> listDrawingPath = new List<string>();
@@ -70,41 +69,45 @@ namespace edrawings_api
                 {
                     if (i.IsNewRow) continue;
                     DataGridViewCellCollection j = i.Cells;
-                    if (j["Drawing"].Value.ToString() == "1")
+                    if (j[GetAssemblyID.strDraw].Value.ToString() == "1")
                     {
-                        string Found_In = j["Found_In"].Value.ToString();
-                        string File_Name = Path.GetFileNameWithoutExtension(j["File_Name"].Value.ToString()) + ".slddrw"; 
+                        string Found_In = j[GetAssemblyID.strFoundIn].Value.ToString();
+                        string File_Name = Path.GetFileNameWithoutExtension(j[GetAssemblyID.strFileName].Value.ToString()) + ".slddrw"; 
                        
                         string fileDRW = Path.Combine(Found_In, File_Name);
 
                         listDrawingPath.Add(fileDRW);
                     }
-
                 }
 
                 if (listDrawingPath.Count > 0)
                 {
-                    fb = new FormBom(listDrawingPath);
-                    fb.EndProcessing += Fb_EndProcessing;
+                    string str = selectFolder();
+                    fb = new FormBom(listDrawingPath, str);              
                     fb.ShowDialog();
                 }
-
             }
-
             catch
             {
-
                 this.Cursor = Cursors.Arrow;
                 MessageBox.Show(" No access to file " + "\n" + saveFileDialog1.FileName.ToString());
-
             }
-
-
         }
-
-        private void Fb_EndProcessing()
+        private string selectFolder()
         {
-           // fb.Dispose();
+            string directory = null;
+            FolderBrowserDialog DirDialog = new FolderBrowserDialog();
+            DirDialog.Description = "Выбор директории";
+           
+            DirDialog.SelectedPath = @"D:\";
+
+            if (DirDialog.ShowDialog() == DialogResult.OK)
+            {
+                directory = DirDialog.SelectedPath;
+            }
+            return directory;
         }
+
+
     }
 }

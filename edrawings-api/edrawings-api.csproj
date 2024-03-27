@@ -79,6 +79,7 @@
     <Compile Include="FormBom.Designer.cs">
       <DependentUpon>FormBom.cs</DependentUpon>
     </Compile>
+    <Compile Include="GetAssemblyID.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="EDrawingsUserControl.resx">
