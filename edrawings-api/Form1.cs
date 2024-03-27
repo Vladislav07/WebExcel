@@ -13,8 +13,9 @@ namespace edrawings_api
     {
         private string FILE_PATH = "";
         DataTable dt;
-     
-   
+        FormBom fb = null;
+
+
         public Form1()
         {
             InitializeComponent();
@@ -72,7 +73,7 @@ namespace edrawings_api
                     if (j["Drawing"].Value.ToString() == "1")
                     {
                         string Found_In = j["Found_In"].Value.ToString();
-                        string File_Name = Path.GetFileNameWithoutExtension(j["File_Name"].Value.ToString()) + ".pdf"; 
+                        string File_Name = Path.GetFileNameWithoutExtension(j["File_Name"].Value.ToString()) + ".slddrw"; 
                        
                         string fileDRW = Path.Combine(Found_In, File_Name);
 
@@ -83,8 +84,9 @@ namespace edrawings_api
 
                 if (listDrawingPath.Count > 0)
                 {
-                    FormBom fb = new FormBom(listDrawingPath);
-                    fb.Show();
+                    fb = new FormBom(listDrawingPath);
+                    fb.EndProcessing += Fb_EndProcessing;
+                    fb.ShowDialog();
                 }
 
             }
@@ -99,7 +101,10 @@ namespace edrawings_api
 
 
         }
-        
 
+        private void Fb_EndProcessing()
+        {
+           // fb.Dispose();
+        }
     }
 }

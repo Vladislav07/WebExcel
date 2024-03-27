@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.IO;
 using System.Collections.Generic;
-using System.Collections;
+using System.Drawing.Printing;
 
 namespace edrawings_api
 {
@@ -13,16 +13,13 @@ namespace edrawings_api
     {
       
         EModelViewControl m_Ctrl;
+        public event Action EndProcessing;
         List<string> listDrawing;
     
         public FormBom(List<string> list)
         {
             listDrawing = list;
             InitializeComponent(); 
-           // var host = new eDrawingHost();
-           // host.ControlLoaded += OnControlLoaded;
-           // this.Controls.Add(host);
-           // host.Dock = DockStyle.Fill;
         }
         protected override void OnShown(EventArgs e)
         {
@@ -65,11 +62,25 @@ namespace edrawings_api
              int AUTO_SOURCE = 7;
              m_Ctrl.SetPageSetupOptions(EMVPrintOrientation.eLandscape, 7, 100, 100, 1, AUTO_SOURCE, PRINTER_NAME, 0, 0, 0, 0);
             string pdfFileName = Path.GetFileNameWithoutExtension(fileName) + ".pdf";
-            string outDir = @"D:\macros";
+            string outDir = @"D:\macros\TEMP";
             string pdfFilePath;
             pdfFilePath = Path.Combine(outDir, pdfFileName);
+            int sheetHeigth = (int)m_Ctrl.SheetHeight;
+            int sheetWidth =(int) m_Ctrl.SheetWidth;
+            EMVPrintOrientation orient;
+            if (sheetHeigth > sheetWidth)
+            {
+                orient = EMVPrintOrientation.ePortrait;
+            }
+            else
+            {
+               orient = EMVPrintOrientation.eLandscape;
+            }
 
-            m_Ctrl.Print5(false, fileName, false, false, true, EMVPrintType.eWYSIWYG, 1, 0, 0, true, 1, 1, pdfFilePath);
+
+            m_Ctrl.SetPageSetupOptions(orient, (int)PaperKind.A4, sheetHeigth, sheetWidth, 1,
+                (int)PaperSourceKind.Custom, PRINTER_NAME, 0, 0, 0,0);
+            m_Ctrl.Print5(false, fileName, false, false, true, EMVPrintType.eScaleToFit, 1, 0, 0, true, 1, 1, pdfFilePath);
         }
 
         private void PrintNext()
@@ -85,8 +96,14 @@ namespace edrawings_api
             }
             else
             {
-               // this.Close();
-               // Application.Exit();
+                var rs = MessageBox.Show("processing completed", "", MessageBoxButtons.OK);
+                if (rs == DialogResult.OK)
+                {
+                    this.Dispose();
+                }
+                 EndProcessing?.Invoke();
+              
+
             }
         }
 
