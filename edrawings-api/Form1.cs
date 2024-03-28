@@ -83,7 +83,8 @@ namespace edrawings_api
                 if (listDrawingPath.Count > 0)
                 {
                     string str = selectFolder();
-                    fb = new FormBom(listDrawingPath, str);              
+                    fb = new FormBom(listDrawingPath, str);
+             
                     fb.ShowDialog();
                 }
             }
@@ -93,6 +94,9 @@ namespace edrawings_api
                 MessageBox.Show(" No access to file " + "\n" + saveFileDialog1.FileName.ToString());
             }
         }
+
+      
+
         private string selectFolder()
         {
             string directory = null;

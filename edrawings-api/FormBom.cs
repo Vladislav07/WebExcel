@@ -15,13 +15,18 @@ namespace edrawings_api
         EModelViewControl m_Ctrl;
         string outDir = null;
         List<string> listDrawing;
+        public event Action endWork;
     
         public FormBom(List<string> list, string pathFolderSave)
         {
             listDrawing = list;
             outDir = pathFolderSave;
-            InitializeComponent(); 
+            InitializeComponent();
+           
         }
+
+      
+
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
@@ -86,7 +91,7 @@ namespace edrawings_api
         private void PrintNext()
         {
             
-            if (listDrawing.Count > 1000)
+            if (listDrawing.Count > 0)
             {
               string filePath = listDrawing[0];
               listDrawing.RemoveAt(0);
@@ -99,7 +104,16 @@ namespace edrawings_api
                 var rs = MessageBox.Show("processing completed", "", MessageBoxButtons.OK);
                 if (rs == DialogResult.OK)
                 {
-                    this.Dispose();
+                    try
+                    {
+                        Invoke(new Action(() => this.Close()));
+                    }
+                    catch
+                    {
+
+                    }
+                    MessageBox.Show("К сожалению, попробуйте завтра.");
+                    
                 }                
             }
         }       

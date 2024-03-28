@@ -37,7 +37,7 @@
       <HintPath>..\packages\ADGV.0.1.0.10\lib\net40\AdvancedDataGridView.dll</HintPath>
     </Reference>
     <Reference Include="eDrawings.Interop.EModelViewControl">
-      <HintPath>..\..\..\..\..\..\Program Files\SOLIDWORKS Corp\eDrawings\eDrawings.Interop.EModelViewControl.dll</HintPath>
+      <HintPath>..\eDrawings.Interop.EModelViewControl.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="SpreadsheetGear, Version=5.0.3.106, Culture=neutral, PublicKeyToken=39c186f5904944ec, processorArchitecture=MSIL">
