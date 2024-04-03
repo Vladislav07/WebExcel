@@ -36,6 +36,11 @@
     <Reference Include="AdvancedDataGridView, Version=0.1.0.10, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ADGV.0.1.0.10\lib\net40\AdvancedDataGridView.dll</HintPath>
     </Reference>
+    <Reference Include="eDrawings.Interop.EModelMarkupControl, Version=27.2.0.66, Culture=neutral, PublicKeyToken=475387b284394570, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\eDrawings.Interop.EModelMarkupControl.dll</HintPath>
+    </Reference>
     <Reference Include="eDrawings.Interop.EModelViewControl">
       <HintPath>..\eDrawings.Interop.EModelViewControl.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>

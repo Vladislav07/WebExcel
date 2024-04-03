@@ -62,21 +62,21 @@ namespace edrawings_api
 
         private void Convert_to_PDF(ADGV.AdvancedDataGridView DG)
         {
-            List<string> listDrawingPath = new List<string>();
+            List<ComponentBom> listDrawingPath = new List<ComponentBom>();
             try
             {
                 foreach (DataGridViewRow i in DG.Rows)
                 {
                     if (i.IsNewRow) continue;
                     DataGridViewCellCollection j = i.Cells;
-                    if (j[GetAssemblyID.strDraw].Value.ToString() == "1")
+                    if (j[GetAssemblyID.strDraw].Value.ToString() == "1" && j[GetAssemblyID.strWhereUsed].Value.ToString() == GetAssemblyID.strSUMQTY)
                     {
                         string Found_In = j[GetAssemblyID.strFoundIn].Value.ToString();
-                        string File_Name = Path.GetFileNameWithoutExtension(j[GetAssemblyID.strFileName].Value.ToString()) + ".slddrw"; 
-                       
+                        string File_Name = Path.GetFileNameWithoutExtension(j[GetAssemblyID.strFileName].Value.ToString()) + ".slddrw";
+                        
                         string fileDRW = Path.Combine(Found_In, File_Name);
-
-                        listDrawingPath.Add(fileDRW);
+                        ComponentBom comBom = new ComponentBom(fileDRW, int.Parse(j[GetAssemblyID.strSUMQTY].Value.ToString()));
+                        listDrawingPath.Add(comBom);
                     }
                 }
 

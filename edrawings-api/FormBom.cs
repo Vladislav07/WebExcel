@@ -6,18 +6,33 @@ using System.Windows.Forms;
 using System.IO;
 using System.Collections.Generic;
 using System.Drawing.Printing;
+using eDrawings.Interop.EModelMarkupControl;
 
 namespace edrawings_api
 {
+    public struct ComponentBom
+    {
+        public ComponentBom(string _path, int _count)
+        {
+            pathFile = _path;
+            count = _count;
+
+        }
+       public string pathFile { get; set; }
+       public int count { get; set; }
+    }
+    
     public partial class FormBom : Form
     {
       
         EModelViewControl m_Ctrl;
+        EModelMarkupControl m_Mtrl;
         string outDir = null;
-        List<string> listDrawing;
+        List<ComponentBom> listDrawing;
         public event Action endWork;
+        string countMarkup = "";
     
-        public FormBom(List<string> list, string pathFolderSave)
+        public FormBom(List<ComponentBom> list, string pathFolderSave)
         {
             listDrawing = list;
             outDir = pathFolderSave;
@@ -40,6 +55,7 @@ namespace edrawings_api
             m_Ctrl.OnFailedLoadingDocument += OnDocumentLoadFailed;
             m_Ctrl.OnFinishedPrintingDocument += OnDocumentPrinted;
             m_Ctrl.OnFailedPrintingDocument += OnPrintFailed;
+            m_Mtrl = m_Ctrl.CoCreateInstance("EModelViewMarkup.EmodelMarkupControl.19") as EModelMarkupControl;
             PrintNext();
         }
         
@@ -81,8 +97,21 @@ namespace edrawings_api
             {
                orient = EMVPrintOrientation.eLandscape;
             }
+            /*
+            try
+            {
+              m_Mtrl.AddStamp("D://approved.png", 1, 1, 1, 1);
+            }
+            catch (Exception e)
+            {
 
-
+                MessageBox.Show(e.Message);
+            }
+            
+            */
+           int toolTipId= m_Ctrl.CreateTooltip(countMarkup, "", false, 450, 400);
+            m_Ctrl.ShowTooltip(toolTipId);
+           
             m_Ctrl.SetPageSetupOptions(orient, (int)PaperKind.A4, sheetHeigth, sheetWidth, 1,
                 (int)PaperSourceKind.Custom, PRINTER_NAME, 0, 0, 0,0);
             m_Ctrl.Print5(false, fileName, false, false, true, EMVPrintType.eScaleToFit, 1, 0, 0, true, 1, 1, pdfFilePath);
@@ -93,9 +122,11 @@ namespace edrawings_api
             
             if (listDrawing.Count > 0)
             {
-              string filePath = listDrawing[0];
+              string filePath = listDrawing[0].pathFile;
+              countMarkup = listDrawing[0].count.ToString();
               listDrawing.RemoveAt(0);
               m_Ctrl.CloseActiveDoc("");
+                
               m_Ctrl.OpenDoc(filePath, false, false, false, "");
 
             }

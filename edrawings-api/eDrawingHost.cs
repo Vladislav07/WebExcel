@@ -11,7 +11,7 @@ namespace edrawings_api
 
         private bool m_IsLoaded;
 
-        public eDrawingHost() : base("22945A69-1191-4DCF-9E6F-409BDE94D101")
+        public eDrawingHost() : base("22945A69-1191-4DCF-9E6F-409BDE94D101") //22945A69-1191-4DCF-9E6F-409BDE94D101
         {
             m_IsLoaded = false;
         }
